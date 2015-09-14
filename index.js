@@ -6,7 +6,7 @@ var autoReconnect = true,
     callSign = "!",
     name = "Kudousu",
     masters = ["U0AJCH48J"],
-    commands = ["say", "debug", "help"];
+    commands = ["say", "debug", "help", "meow"];
 
 slack = new Slack(token, autoReconnect, autoMark)
 
