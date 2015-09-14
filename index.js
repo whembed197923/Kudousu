@@ -6,7 +6,7 @@ var autoReconnect = true,
     callSign = "!",
     name = "Kudousu",
     masters = ["U0AJCH48J"],
-    commands = ["say", "debug"];
+    commands = ["say", "debug", "help"];
 
 slack = new Slack(token, autoReconnect, autoMark)
 
@@ -45,7 +45,7 @@ slack.on("message", function(message) {
             try {
                 require("./commands/" + command + ".js").main(channel, user, type, callSign, name, masters, commands, command, args);
             } catch(e) {
-                channel.send("Couldn't execute function " + command + ".")
+                channel.send("Couldn't execute function '" + command + "'.")
             }
         }
     }
