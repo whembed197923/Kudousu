@@ -17,7 +17,7 @@ exports.main = function(slack, message, channel, user, type, callSign, name, mas
                 
                 var attach = [{
                     "fallback": "Fallback",
-                    "color": "F38B331",
+                    "color": "#F38B33",
                     "title": "Currency:",
                     "text": args[2] + " " + from + " = " + result + " " + to,
                 }];
