@@ -1,12 +1,12 @@
 var Slack = require('slack-client');
 var fs = require('fs');
-var token = fs.readFileSync("../kudousu-key") + '';
+var token = fs.readFileSync("../kudousu-key") + "";
 var autoReconnect = true,
     autoMark = true,
     callSign = "!",
     name = "Kudousu",
     masters = ["U0AJCH48J"],
-    commands = ["say", "debug", "help", "meow", "tmyk"],
+    commands = ["say", "debug", "help", "meow", "currency"],
     reacts = ["(╯°□°）╯︵ ┻━┻)"],
     reactSrc = [];
 
@@ -47,16 +47,16 @@ slack.on("message", function(message) {
             channel.send("Yes? If you need help, you could use " + callSign + "help.")
         } else if(commands.indexOf(command) != -1) {
             try {
-                require("./commands/" + command + ".js").main(channel, user, type, callSign, name, masters, commands, command, args);
+                require("./commands/" + command + ".js").main(slack, message, channel, user, type, callSign, name, masters, commands, command, args);
             } catch(e) {
-                channel.send("Couldn't run command '" + command + "'.")
+                channel.send("Couldn't run command '" + command + "'. Here's what I know: ```" + e + "```")
             }
         }
     } else if(reacts.indexOf(text) != -1) {
         try {
-            require("./reacts/" + reactSrc[text] + ".js").main(channel, user, type, callSign, name, masters, commands, command, args);
+            require("./reacts/" + reactSrc[text] + ".js").main(slack, message, channel, user, type, callSign, name, masters, commands, command, args);
         } catch(e) {
-            channel.send("Couldn't react to '" + text + "'.");
+            channel.send("Couldn't react to '" + text + "'. Here's what I know: ```" + e + "```");
         }
     }
 });

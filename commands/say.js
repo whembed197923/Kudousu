@@ -1,4 +1,4 @@
-exports.main = function(channel, user, type, callSign, name, masters, commands, command, args) {
+exports.main = function(slack, message, channel, user, type, callSign, name, masters, commands, command, args) {
     if(masters.indexOf(user.id) != -1) {
         channel.send(args.join(" "));
     } else {
