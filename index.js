@@ -7,7 +7,10 @@ var autoReconnect = true,
     name = "Kudousu",
     masters = ["U0AJCH48J"],
     commands = ["say", "debug", "help", "meow", "tmyk"],
-    reacts = ["(╯°□°）╯︵ ┻━┻)"];
+    reacts = ["(╯°□°）╯︵ ┻━┻)"],
+    reactSrc = [];
+
+reactSrc["(╯°□°）╯︵ ┻━┻)"] = "flip";
 
 slack = new Slack(token, autoReconnect, autoMark)
 
@@ -51,7 +54,7 @@ slack.on("message", function(message) {
         }
     } else if(reacts.indexOf(text) != -1) {
         try {
-            require("./reacts/" + text + ".js").main(channel, user, type, callSign, name, masters, commands, command, args);
+            require("./reacts/" + reactSrc[text] + ".js").main(channel, user, type, callSign, name, masters, commands, command, args);
         } catch(e) {
             channel.send("Couldn't react to '" + text + "'.");
         }
