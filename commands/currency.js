@@ -9,9 +9,9 @@ exports.main = function(slack, message, channel, user, type, callSign, name, mas
         if(!err && response.statusCode === 200) {
             var data = JSON.parse(body);
             if(data.success) {
-                from = data.quotes["USD" + from];
-                to = data.quotes["USD" + to];
-                var rate = to / from;
+                var fromCur = data.quotes["USD" + from];
+                var toCur = data.quotes["USD" + to];
+                var rate = toCur / fromCur;
                 if(isNaN(rate)) return;
                 var result = rate * args[2];
                 
