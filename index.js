@@ -51,11 +51,10 @@ slack.on("message", function(message) {
             channel.send("Yes? If you need help, you could use " + callSign + "help.")
         } else if(commands.indexOf(command) != -1) {
             try {
-                var ret = require("./commands/" + command + ".js").main(slack, message, channel, user, type, callSign, name, masters, commands, command, args);
+                var cmdModule = require("./commands/" + command + ".js");
+                var ret = cmdModule.main(slack, message, channel, user, type, callSign, name, masters, commands, command, args);
                 if(ret !== exit.success) {
                     error(channel, command, ret);
-                } else {
-                    console.log(ret);
                 }
             } catch(e) {
                 error(channel, command, e);
