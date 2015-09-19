@@ -3,3 +3,11 @@ exports.main = function(slack, message, channel, user, type, callSign, name, mas
     channel.send(args + " | " + command);
     return exit.success;
 };
+
+exports.inputArgs = function() {
+    return {arguments: [0], type: []};
+}
+
+exports.help = function() {
+    return {"info": "Reserved for debugging"}
+}
