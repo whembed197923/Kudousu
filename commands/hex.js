@@ -26,5 +26,5 @@ exports.inputArgs = function() {
 }
 
 exports.help = function() {
-    return {"info": "RGB to HEX"}
+    return {"info": "Magic"}
 }

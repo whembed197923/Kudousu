@@ -19,7 +19,7 @@ exports.main = function(slack, message, channel, user, type, callSign, name, mas
         }
     });
     
-    channel.send("The commands available are: \n" + cmds.join("\n"));
+    channel.send("I can do: \n>" + cmds.join("\n>") + "\n Which is much more than you can!");
     return exit.success;
 };
 
@@ -28,5 +28,5 @@ exports.inputArgs = function() {
 }
 
 exports.help = function() {
-    return {"info": "Displays help"}
+    return {"info": "This"}
 }

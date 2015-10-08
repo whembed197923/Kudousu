@@ -1,18 +1,34 @@
 var Slack = require('slack-client'),
-    fs = require('fs'),
-    pmx = require('pmx');
-var token = fs.readFileSync("../kudousu-key") + "";
+    keys = require('./keys')
+    pmx = require('pmx'),
+    memwatch = require('memwatch-next');
 var exit = require("./core/exit.js");
 var autoReconnect = true,
     autoMark = true,
     callSign = "!",
-    name = "Kudousu",
+    name = "projectKudousu",
     masters = ["U0AJCH48J", "WEBUI"],
-    commands = ["say", "debug", "help", "meow", "hex", "test", "quit"],
+    commands = ["say", "debug", "help", "meow", "hex", "test", "quit", "gc"],
     reacts = ["(╯°□°）╯︵ ┻━┻)"],
     reactSrc = [];
 
+memwatch.on("leak", function(info) {
+    console.error("Memory Leak: " + info);
+    memLog("leak", info);
+});
+
+memwatch.on("stats", function(info) {
+    memLog("stats", info);
+});
+
 reactSrc["(╯°□°）╯︵ ┻━┻)"] = "flip";
+
+function memLog(type, info) {
+    pmx.emit("memoryLog", {
+        "type": type,
+        "info": info
+    });
+}
 
 function error(channel, command, e) {
     channel.send("Couldn't run command '" + command + "'. Here's what I know: ```" + e + "```");
@@ -41,7 +57,7 @@ function commandLog(isSuccess, user, command, args, error) {
     });
 }
 
-slack = new Slack(token, autoReconnect, autoMark);
+slack = new Slack(keys.slack(), autoReconnect, autoMark);
 
 slack.on("open", function() {
    console.log("Connected to Slack");
@@ -50,6 +66,7 @@ slack.on("open", function() {
 slack.on("message", function(message) {
     var me = slack.self;
     var profile = me["_client"].users[me.id].profile;
+    name = profile.real_name;
     var channel = slack.getChannelGroupOrDMByID(message.channel);
     var user = slack.getUserByID(message.user);
     var type = message.type;
@@ -81,7 +98,13 @@ slack.on("message", function(message) {
             var args = raw.join(" ").substr(raw[0].length + 1).split(" ");
         }
         if(text === callSign) {
-            channel.send("Hi, I'm " + profile.real_name + ". If you need help, you could use " + callSign + "help.")
+            if(name == "Hakase") {
+                var randomText = ["Give me dessert, or just", "Oh hey, a shark cloud! Stop bothering me, just", "Nano, there's a stranger bothering me... Please", "Nano will be happy to see that I've painted her daruma's other ey--- Sakamoto! I need"]
+                var random = randomText[Math.floor(Math.random()*randomText.length)];
+            } else {
+                var random = "If you need help, do";
+            }
+            channel.send("I'm " + name + ". " + random + " "+ callSign + "help.");
         } else if(commands.indexOf(command) != -1) {
             try {
                 var cmdModule = require("./commands/" + command + ".js"),
@@ -96,7 +119,6 @@ slack.on("message", function(message) {
                     } else {
                         commandLog(true, user, command, args, "None");
                     }
-                    
                 } else {
                     usage(callSign, channel, command, cmdModule);
                     commandLog(false, user, command, args, "Improper Arguments");

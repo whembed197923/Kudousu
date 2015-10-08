@@ -9,5 +9,5 @@ exports.inputArgs = function() {
 }
 
 exports.help = function() {
-    return {"info": "Reserved for beta features"}
+    return {"info": "Test"}
 }

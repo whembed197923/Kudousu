@@ -25,5 +25,5 @@ exports.inputArgs = function() {
 }
 
 exports.help = function() {
-    return {"info": "Say something"}
+    return {"info": "Talk"}
 }
